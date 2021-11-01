@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: gcloud-webapp
+        image: europe-central2-docker.pkg.dev/tanzania-330508/gcloud-webapp/webapp-image:3f75517
+        ports:
+        - containerPort: 8080
