@@ -4,5 +4,9 @@ steps:
 - name: 'gcr.io/cloud-builders/kubectl'
   args: [ 'patch', 'deployment', '${_DEPLOYMENT}', '-n', '${_NAMESPACE}', '-p',
           '{"spec": {"template":  "spec": {"containers": [{"name": "webapp","image": "${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA"}]}}}}' ]
+  env:
+  # required K8s cluster env variables
+  - 'CLOUDSDK_COMPUTE_ZONE=${_K8S_ZONE}'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=${_K8S_CLUSTER}'
 images:
 - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA'
