@@ -19,3 +19,40 @@ spec:
         image: europe-central2-docker.pkg.dev/tanzania-330508/gcloud-webapp/webapp-image:3f75517
         ports:
         - containerPort: 8080
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-webapp-secret 
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-webapp-secret
+              key: password
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: db-webapp-secret
+              key: database
+      - name: cloud-sql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.17
+        command:
+          - "/cloud_sql_proxy"
+          - "-ip_address_types=PRIVATE"
+          - "-instances=tanzania-330508:europe-central2:webapp-db=tcp:5432"
+          - "-credential_file=/secrets/service_account.json"
+        securityContext:
+          runAsNonRoot: true
+        volumeMounts:
+        - name: volume-sa-secret 
+          mountPath: /secrets/
+          readOnly: true
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu:    "1"
+      volumes:
+      - name: volume-sa-secret
+        secret:
+          secretName: service-account

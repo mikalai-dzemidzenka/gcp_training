@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webapp-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "webapp-static-ip"
+spec:
+  defaultBackend:
+    service:
+      name: webapp-service
+      port:
+        number: 8080
