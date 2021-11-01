@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: gcloud-webapp
-        image: europe-central2-docker.pkg.dev/tanzania-330508/gcloud-webapp/webapp-image:3f75517
+        image: europe-central2-docker.pkg.dev/tanzania-330508/gcloud-webapp/webapp-image:592226e
         ports:
         - containerPort: 8080
         env:
@@ -48,10 +48,6 @@ spec:
         - name: volume-sa-secret 
           mountPath: /secrets/
           readOnly: true
-        resources:
-          requests:
-            memory: "2Gi"
-            cpu:    "1"
       volumes:
       - name: volume-sa-secret
         secret:

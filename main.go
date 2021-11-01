@@ -27,7 +27,7 @@ func initTCPConnectionPool() (*sql.DB, error) {
 		dbName = mustGetenv("DB_NAME")
 	)
 
-	dbURI := fmt.Sprintf("user=%s password=%s database=%s", dbUser, dbPass, dbName)
+	dbURI := fmt.Sprintf("user=%s password=%s database=%s host=127.0.0.1 port=5432", dbUser, dbPass, dbName)
 	dbPool, err := sql.Open("pgx", dbURI)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create connection to db: %w", err)
