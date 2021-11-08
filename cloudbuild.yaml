@@ -3,26 +3,26 @@ steps:
   id: Build application
   args: [ 'build', '-t', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA', '.' ]
 - name: 'gcr.io/cloud-builders/kubectl'
+  id: Create kuberentes secret from secret manager for database access
+  entrypoint: "bash"
+  args:
+    - '-c'
+    - |-
+      kubectl create secret generic db-webapp-secret
+      --from-literal=username=$$DB_USERNAME
+      --from-literal=password=$$DB_PASSWORD
+      --from-literal=database=$$DB_NAME
+      -o yaml --dry-run=client | kubectl apply -f -']
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=${_K8S_ZONE}'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=${_K8S_CLUSTER}'
+  secretEnv: [ 'DB_USERNAME', 'DB_PASSWORD', 'DB_NAME' ]
+- name: 'gcr.io/cloud-builders/kubectl'
   id: Change image in deployment
   args: [ 'set','image', 'deployment/${_DEPLOYMENT}', '-n', '${_NAMESPACE}','gcloud-webapp=${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA' ]
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=${_K8S_ZONE}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_K8S_CLUSTER}'
-- name: 'gcr.io/cloud-builders/kubectl'
-  id: Create kuberentes secret from secret manager for database access
-  entrypoint: "bash"
-  args:
-  - '-c'
-  - |-
-    kubectl create secret generic db-webapp-secret
-    --from-literal=username=$$DB_USERNAME
-    --from-literal=password=$$DB_PASSWORD
-    --from-literal=database=$$DB_NAME
-    -o yaml --dry-run=client | kubectl apply -f -']
-  env:
-    - 'CLOUDSDK_COMPUTE_ZONE=${_K8S_ZONE}'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=${_K8S_CLUSTER}'
-  secretEnv: [ 'DB_USERNAME', 'DB_PASSWORD', 'DB_NAME' ]
 availableSecrets:
   secretManager:
     - versionName: projects/1044361102494/secrets/db-password/versions/1
