@@ -8,7 +8,7 @@ steps:
   args:
     - '-c'
     - |-
-      kubectl.bash create secret generic db-webapp-secret --from-literal=username=$$DB_USERNAME --from-literal=password=$$DB_PASSWORD --from-literal=database=$$DB_NAME -o yaml --dry-run=client | kubectl.bash apply -f -
+      kubectl create secret generic db-webapp-secret --from-literal=username=$$DB_USERNAME --from-literal=password=$$DB_PASSWORD --from-literal=database=$$DB_NAME -o yaml --dry-run=client | kubectl apply -f -
   env:
     - 'CLOUDSDK_COMPUTE_ZONE=${_K8S_ZONE}'
     - 'CLOUDSDK_CONTAINER_CLUSTER=${_K8S_CLUSTER}'
