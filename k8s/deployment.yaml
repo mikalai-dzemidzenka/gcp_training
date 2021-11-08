@@ -41,6 +41,6 @@ spec:
         command:
           - "/cloud_sql_proxy"
           - "-ip_address_types=PRIVATE"
-          - "-instances=${INSTANCE_CONNECTION_NAME}=tcp:5432"
+          - "-instances=tanzania-330508:europe-central2:webapp-db=tcp:5432"
         securityContext:
           runAsNonRoot: true
