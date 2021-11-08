@@ -14,10 +14,9 @@ spec:
       labels:
         app: webapp
     spec:
-      serviceAccountName: webapp-service-account
       containers:
       - name: gcloud-webapp
-        image: $IMAGE
+        image: europe-central2-docker.pkg.dev/tanzania-330508/gcloud-webapp/webapp-image:latest
         ports:
         - containerPort: 8080
         env:
@@ -44,3 +43,4 @@ spec:
           - "-instances=tanzania-330508:europe-central2:webapp-db=tcp:5432"
         securityContext:
           runAsNonRoot: true
+      serviceAccountName: webapp-service-account
