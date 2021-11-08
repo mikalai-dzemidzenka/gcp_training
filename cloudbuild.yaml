@@ -23,13 +23,13 @@ steps:
     - 'CLOUDSDK_COMPUTE_ZONE=${_K8S_ZONE}'
     - 'CLOUDSDK_CONTAINER_CLUSTER=${_K8S_CLUSTER}'
   secretEnv: [ 'DB_USERNAME', 'DB_PASSWORD', 'DB_NAME' ]
-  availableSecrets:
-    secretManager:
-      - versionName: projects/1044361102494/secrets/db-password
-        env: 'DB_PASSWORD'
-      - versionName: projects/1044361102494/secrets/db-username
-        env: 'DB_USERNAME'
-      - versionName: projects/1044361102494/secrets/db-name
-        env: 'DB_NAME'
+availableSecrets:
+  secretManager:
+    - versionName: projects/1044361102494/secrets/db-password
+      env: 'DB_PASSWORD'
+    - versionName: projects/1044361102494/secrets/db-username
+      env: 'DB_USERNAME'
+    - versionName: projects/1044361102494/secrets/db-name
+      env: 'DB_NAME'
 images:
 - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA'
