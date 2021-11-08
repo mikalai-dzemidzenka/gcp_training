@@ -14,9 +14,10 @@ spec:
       labels:
         app: webapp
     spec:
+      serviceAccountName: webapp-service-account
       containers:
       - name: gcloud-webapp
-        image: europe-central2-docker.pkg.dev/tanzania-330508/gcloud-webapp/webapp-image:592226e
+        image: $IMAGE
         ports:
         - containerPort: 8080
         env:
@@ -40,15 +41,6 @@ spec:
         command:
           - "/cloud_sql_proxy"
           - "-ip_address_types=PRIVATE"
-          - "-instances=tanzania-330508:europe-central2:webapp-db=tcp:5432"
-          - "-credential_file=/secrets/service_account.json"
+          - "-instances=${INSTANCE_CONNECTION_NAME}=tcp:5432"
         securityContext:
           runAsNonRoot: true
-        volumeMounts:
-        - name: volume-sa-secret 
-          mountPath: /secrets/
-          readOnly: true
-      volumes:
-      - name: volume-sa-secret
-        secret:
-          secretName: service-account
