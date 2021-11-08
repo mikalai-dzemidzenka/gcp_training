@@ -25,11 +25,11 @@ steps:
   secretEnv: [ 'DB_USERNAME', 'DB_PASSWORD', 'DB_NAME' ]
 availableSecrets:
   secretManager:
-    - versionName: projects/1044361102494/secrets/db-password
+    - versionName: projects/1044361102494/secrets/db-password/versions/1
       env: 'DB_PASSWORD'
-    - versionName: projects/1044361102494/secrets/db-username
+    - versionName: projects/1044361102494/secrets/db-username/versions/1
       env: 'DB_USERNAME'
-    - versionName: projects/1044361102494/secrets/db-name
+    - versionName: projects/1044361102494/secrets/db-name/versions/1
       env: 'DB_NAME'
 images:
 - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA'
