@@ -23,7 +23,7 @@ steps:
     - -c
     - |
       /workspace/cloud_sql_proxy -dir=/workspace -instances=tanzania-330508:europe-central2:webapp-db & sleep 2 && \
-      docker run -v /workspace:/root -v migrations:/migrations migrate/migrate -path=/migrations/ -database "postgres://$$DB_USERNAME:$$DB_PASSWORD@%2Froot%2Ftanzania-330508%3Aeurope-central2%3Awebapp-db%2F/$$DB_NAME?sslmode=disable" up
+      docker run -v /workspace:/root -v migrations:/migrations migrate/migrate -path=/migrations/ -database "postgresql:///$$$DB_NAME?host=/workspace/tanzania-330508:europe-central2:webapp-db/" up
   secretEnv: [ 'DB_USERNAME', 'DB_PASSWORD', 'DB_NAME' ]
   waitFor: ["install-proxy"]
 - name: 'gcr.io/cloud-builders/kubectl'
