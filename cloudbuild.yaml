@@ -9,22 +9,22 @@ steps:
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=${_K8S_ZONE}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_K8S_CLUSTER}'
-- id: Install proxy
+- id: install-proxy
   name: gcr.io/cloud-builders/wget
   entrypoint: bash
   args:
   - '-c'
   - 'wget -O /workspace/cloud_sql_proxy https://storage.googleapis.com/cloudsql-proxy/v1.17/cloud_sql_proxy.linux.386 && chmod +x /workspace/cloud_sql_proxy'
-- id: Migrate
+- id: migrate
   name: gcr.io/cloud-builders/docker
   entrypoint: bash
   args:
     - -c
     - |
       /workspace/cloud_sql_proxy -dir=/workspace -instances=tanzania-330508:europe-central2:webapp-db & sleep 2 && \
-      docker run -v /workspace:/root \
-      docker run -v migrations:/migrations --network host migrate/migrate -path=/migrations/ -database postgres://$$DB_USERNAME:$$DB_PASSWORD@localhost:5432/$$DB_NAME?sslmode=disable up
+      docker run -v /workspace:/root -v migrations:/migrations migrate/migrate -path=/migrations/ -database postgres://$$DB_USERNAME:$$DB_PASSWORD@/root/tanzania-330508:europe-central2:webapp-db/$$DB_NAME?sslmode=disable up
   secretEnv: [ 'DB_USERNAME', 'DB_PASSWORD', 'DB_NAME' ]
+  waitFor: ["install-proxy"]
 - name: 'gcr.io/cloud-builders/kubectl'
   id: Create kuberentes secret from secret manager for database access
   entrypoint: "bash"
